@@ -3,6 +3,8 @@ use std::{sync::mpsc, thread, time::Duration};
 fn main(){
     let (tx, rx) = mpsc::channel();
 
+    let tx2 = tx.clone();
+
     thread::spawn(move || {
         let vals = vec![
             String::from("hi"),
@@ -13,6 +15,21 @@ fn main(){
 
         for val in vals {
             tx.send(val).unwrap();
+            thread::sleep(Duration::from_secs(1));
+        }
+
+    });
+
+    thread::spawn(move || {
+        let vals = vec![
+            String::from("more"),
+            String::from("messages"),
+            String::from("for"),
+            String::from("you"),
+        ];
+
+        for val in vals {
+            tx2.send(val).unwrap();
             thread::sleep(Duration::from_secs(1));
         }
 
